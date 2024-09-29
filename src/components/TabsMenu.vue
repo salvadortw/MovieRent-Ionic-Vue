@@ -9,7 +9,7 @@
         </ion-tab-button>
 
         <ion-tab-button tab="explorar" href="/explorar">
-          <ion-icon :icon="compassOutline"></ion-icon>
+          <ion-icon :icon="filmOutline"></ion-icon>
           <ion-label>Explorar</ion-label>
         </ion-tab-button>
 
@@ -28,8 +28,21 @@
 </template>
 
 <script lang="ts">
-import { IonPage, IonTabs, IonRouterOutlet, IonTabBar, IonTabButton, IonLabel, IonIcon } from '@ionic/vue';
-import { homeOutline, compassOutline, cartOutline, personCircleOutline } from 'ionicons/icons';
+import {
+  IonPage,
+  IonTabs,
+  IonRouterOutlet,
+  IonTabBar,
+  IonTabButton,
+  IonLabel,
+  IonIcon,
+} from "@ionic/vue";
+import {
+  homeOutline,
+  filmOutline,
+  cartOutline,
+  personCircleOutline,
+} from "ionicons/icons";
 
 export default {
   components: {
@@ -44,7 +57,7 @@ export default {
   data() {
     return {
       homeOutline,
-      compassOutline,
+      filmOutline,
       cartOutline,
       personCircleOutline,
     };

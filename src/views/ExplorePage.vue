@@ -2,6 +2,9 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-menu-button></ion-menu-button>
+        </ion-buttons>
         <ion-title>Explorar</ion-title>
       </ion-toolbar>
     </ion-header>
@@ -37,39 +40,39 @@
 
       <section class="explore-movies mb-2">
         <div class="card">
-          <img src="/public/images/movie-1.webp" alt="">
+          <img src="/public/images/movie-1.webp" alt="" />
         </div>
 
         <div class="card">
-          <img src="/public/images/movie-2.webp" alt="">         
+          <img src="/public/images/movie-2.webp" alt="" />
         </div>
 
         <div class="card">
-          <img src="/public/images/movie-3.webp" alt="">
+          <img src="/public/images/movie-3.webp" alt="" />
         </div>
 
         <div class="card">
-          <img src="/public/images/movie-4.webp" alt="">
+          <img src="/public/images/movie-4.webp" alt="" />
         </div>
 
         <div class="card">
-          <img src="/public/images/movie-5.webp" alt="">
+          <img src="/public/images/movie-5.webp" alt="" />
         </div>
 
         <div class="card">
-          <img src="/public/images/movie-6.webp" alt="">
+          <img src="/public/images/movie-6.webp" alt="" />
         </div>
 
         <div class="card">
-          <img src="/public/images/movie-7.webp" alt="">
+          <img src="/public/images/movie-7.webp" alt="" />
         </div>
 
         <div class="card">
-          <img src="/public/images/movie-8.webp" alt="">
+          <img src="/public/images/movie-8.webp" alt="" />
         </div>
 
         <div class="card">
-          <img src="/public/images/movie-9.webp" alt="">
+          <img src="/public/images/movie-9.webp" alt="" />
         </div>
       </section>
     </ion-content>
@@ -77,15 +80,41 @@
 </template>
 
 <script lang="ts">
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonSearchbar, IonIcon, IonItem, IonList, IonSelect, IonSelectOption } from '@ionic/vue';
+import {
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent,
+  IonPage,
+  IonSearchbar,
+  IonIcon,
+  IonItem,
+  IonList,
+  IonSelect,
+  IonSelectOption,
+  IonMenuButton,
+  IonButtons,
+} from "@ionic/vue";
 
 export default {
-  components: { IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonSearchbar, IonIcon, IonItem, IonList, IonSelect, IonSelectOption },
+  components: {
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonPage,
+    IonSearchbar,
+    IonIcon,
+    IonItem,
+    IonList,
+    IonSelect,
+    IonSelectOption,
+    IonMenuButton,
+    IonButtons,
+  },
   data() {
-    return {
-      
-    }
-  }
+    return {};
+  },
 };
 </script>
 

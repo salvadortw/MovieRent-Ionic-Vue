@@ -43,6 +43,26 @@ const routes: Array<RouteRecordRaw> = [
         path: 'registro',
         component: () => import('@/views/SignUpPage.vue'),
       },
+      {
+        path: 'historial',
+        component: () => import('@/views/HistoryRentPage.vue'),
+      },
+      {
+        path: 'configuracion',
+        component: () => import('@/views/SettingsPage.vue'),
+      },
+      {
+        path: 'favoritos',
+        component: () => import('@/views/FavoritesPage.vue'),
+      },
+      {
+        path: 'sobreNosotros',
+        component: () => import('@/views/AboutPage.vue'),
+      },
+      {
+        path: 'contacto',
+        component: () => import('@/views/ContactPage.vue'),
+      },
     ],
   },
 ];

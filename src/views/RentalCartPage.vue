@@ -2,6 +2,9 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-menu-button></ion-menu-button>
+        </ion-buttons>
         <ion-title>Carrito de Alquiler</ion-title>
       </ion-toolbar>
     </ion-header>
@@ -10,11 +13,13 @@
         <ion-item-sliding>
           <ion-item>
             <div class="movie-image w-40">
-              <img src="/public/images/movie-1.webp" alt="">
+              <img src="/public/images/movie-1.webp" alt="" />
             </div>
             <div class="info-movie px-8">
               <h2 class="text-xl font-bold mb-2">Película 1</h2>
-              <ion-label class="text-sm opacity-60 mb-2">Alquiler por 24 horas</ion-label>
+              <ion-label class="text-sm opacity-60 mb-2"
+                >Alquiler por 24 horas</ion-label
+              >
               <ion-label class="text-base font-semibold">$1.900</ion-label>
             </div>
           </ion-item>
@@ -32,11 +37,13 @@
         <ion-item-sliding>
           <ion-item>
             <div class="movie-image w-40">
-              <img src="/public/images/movie-2.webp" alt="">
+              <img src="/public/images/movie-2.webp" alt="" />
             </div>
             <div class="info-movie px-8">
               <h2 class="text-xl font-bold mb-2">Película 2</h2>
-              <ion-label class="text-sm opacity-60 mb-2">Alquiler por 24 horas</ion-label>
+              <ion-label class="text-sm opacity-60 mb-2"
+                >Alquiler por 24 horas</ion-label
+              >
               <ion-label class="text-base font-semibold">$1.900</ion-label>
             </div>
           </ion-item>
@@ -54,11 +61,13 @@
         <ion-item-sliding>
           <ion-item>
             <div class="movie-image w-40">
-              <img src="/public/images/movie-3.webp" alt="">
+              <img src="/public/images/movie-3.webp" alt="" />
             </div>
             <div class="info-movie px-8">
               <h2 class="text-xl font-bold mb-2">Película 3</h2>
-              <ion-label class="text-sm opacity-60 mb-2">Alquiler por 24 horas</ion-label>
+              <ion-label class="text-sm opacity-60 mb-2"
+                >Alquiler por 24 horas</ion-label
+              >
               <ion-label class="text-base font-semibold">$1.900</ion-label>
             </div>
           </ion-item>
@@ -81,8 +90,10 @@
             <ion-label class="text-lg font-semibold">$5.700</ion-label>
           </div>
         </ion-toolbar>
-        <ion-toolbar> 
-          <ion-button class="w-full px-2 font-bold text-white" color="primary"><span class="text-white">Proceder al Pago</span></ion-button>
+        <ion-toolbar>
+          <ion-button class="w-full px-2 font-bold text-white" color="primary"
+            ><span class="text-white">Proceder al Pago</span></ion-button
+          >
         </ion-toolbar>
       </ion-footer>
     </ion-content>
@@ -90,18 +101,52 @@
 </template>
 
 <script lang="ts">
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonIcon, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, IonList, IonFooter, IonButton, } from '@ionic/vue';
+import {
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent,
+  IonPage,
+  IonIcon,
+  IonItem,
+  IonItemOption,
+  IonItemOptions,
+  IonItemSliding,
+  IonLabel,
+  IonList,
+  IonFooter,
+  IonButton,
+  IonMenuButton,
+  IonButtons,
+} from "@ionic/vue";
 
-import { heart, trash } from 'ionicons/icons';
+import { heart, trash } from "ionicons/icons";
 
 export default {
-  components: { IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonIcon, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, IonList, IonFooter, IonButton },
+  components: {
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonPage,
+    IonIcon,
+    IonItem,
+    IonItemOption,
+    IonItemOptions,
+    IonItemSliding,
+    IonLabel,
+    IonList,
+    IonFooter,
+    IonButton,
+    IonMenuButton,
+    IonButtons,
+  },
   data() {
     return {
       heart,
-      trash
-    }
-  }
+      trash,
+    };
+  },
 };
 </script>
 
