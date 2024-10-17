@@ -13,7 +13,10 @@
         <ion-item-sliding>
           <ion-item>
             <div class="movie-image w-40">
-              <img src="/public/images/movie-1.webp" alt="" />
+              <img
+                src="https://image.tmdb.org/t/p/original/pi6mwFCtTDIAHOHWan4AQ36Tdh2.jpg"
+                alt=""
+              />
             </div>
             <div class="info-movie px-8">
               <h2 class="text-xl font-bold mb-2">Película 1</h2>
@@ -37,7 +40,10 @@
         <ion-item-sliding>
           <ion-item>
             <div class="movie-image w-40">
-              <img src="/public/images/movie-2.webp" alt="" />
+              <img
+                src="https://image.tmdb.org/t/p/original/pi6mwFCtTDIAHOHWan4AQ36Tdh2.jpg"
+                alt=""
+              />
             </div>
             <div class="info-movie px-8">
               <h2 class="text-xl font-bold mb-2">Película 2</h2>
@@ -61,7 +67,10 @@
         <ion-item-sliding>
           <ion-item>
             <div class="movie-image w-40">
-              <img src="/public/images/movie-3.webp" alt="" />
+              <img
+                src="https://image.tmdb.org/t/p/original/pi6mwFCtTDIAHOHWan4AQ36Tdh2.jpg"
+                alt=""
+              />
             </div>
             <div class="info-movie px-8">
               <h2 class="text-xl font-bold mb-2">Película 3</h2>

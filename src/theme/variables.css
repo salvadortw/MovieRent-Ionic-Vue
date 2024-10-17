@@ -74,7 +74,7 @@
   --ion-color-light-tint: #f5f6f9;
 
   .swiper-pagination-bullet-active {
-    background-color: #222 !important;
+    background-color: #9c9c9c !important;
 }
 }
 
@@ -149,3 +149,4 @@
   --ion-color-light-shade: #1e2023;
   --ion-color-light-tint: #383a3e;
 }
+

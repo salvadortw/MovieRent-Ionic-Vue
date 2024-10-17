@@ -39,41 +39,32 @@
       </header>
 
       <section class="explore-movies mb-2">
-        <div class="card">
-          <img src="/public/images/movie-1.webp" alt="" />
+        <div class="px-1" v-for="movie in movies" :key="movie.id">
+          <img
+              :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path"
+              alt="Movie Poster"
+              @click="goToMovieDetail(movie.id)"
+              class="poster-image"
+            ></img>
+            <div class="flex items-center justify-between px-[2px]">
+              <h4 class="text-base font-semibold">
+                {{ movie.title }}
+              </h4>
+              <button class="mt-3" @click="showOptions(movie)">
+                <ion-icon
+                  :icon="ellipsisHorizontal"
+                ></ion-icon>
+              </button>
+            </div>
         </div>
 
-        <div class="card">
-          <img src="/public/images/movie-2.webp" alt="" />
-        </div>
-
-        <div class="card">
-          <img src="/public/images/movie-3.webp" alt="" />
-        </div>
-
-        <div class="card">
-          <img src="/public/images/movie-4.webp" alt="" />
-        </div>
-
-        <div class="card">
-          <img src="/public/images/movie-5.webp" alt="" />
-        </div>
-
-        <div class="card">
-          <img src="/public/images/movie-6.webp" alt="" />
-        </div>
-
-        <div class="card">
-          <img src="/public/images/movie-7.webp" alt="" />
-        </div>
-
-        <div class="card">
-          <img src="/public/images/movie-8.webp" alt="" />
-        </div>
-
-        <div class="card">
-          <img src="/public/images/movie-9.webp" alt="" />
-        </div>
+        <ion-action-sheet
+          :is-open="isOpen"
+          @did-dismiss="isOpen = false"
+          header="Opciones"
+          :buttons="actionSheetButtons"
+        >
+        </ion-action-sheet>
       </section>
     </ion-content>
   </ion-page>
@@ -94,7 +85,16 @@ import {
   IonSelectOption,
   IonMenuButton,
   IonButtons,
+  IonActionSheet,
+  IonImg,
 } from "@ionic/vue";
+
+import { onMounted, ref } from "vue";
+import { Movie } from "@/interfaces/Movie";
+import { getTopRated } from "@/services/MovieServices";
+import { useRouter } from "vue-router";
+
+import { ellipsisHorizontal, cartOutline, heartOutline } from "ionicons/icons";
 
 export default {
   components: {
@@ -111,33 +111,115 @@ export default {
     IonSelectOption,
     IonMenuButton,
     IonButtons,
+    IonActionSheet,
+    IonImg,
   },
+
+  setup() {
+    const movies = ref<Movie[]>([]);
+    const isOpen = ref(false);
+    const selectedMovie = ref(null);
+    const router = useRouter();
+
+    const getData = async () => {
+      try {
+        const response = await getTopRated();
+        movies.value = response.results;
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    const goToMovieDetail = (movieId: number) => {
+      router.push(`/movie/${movieId}`);
+    };
+
+    const loadMovies = async () => {
+      const response = await getTopRated();
+      movies.value = response.results;
+    };
+
+    onMounted(() => {
+      getData();
+      loadMovies();
+    });
+
+    const showOptions = (movie: any) => {
+      selectedMovie.value = movie;
+      isOpen.value = true;
+    };
+
+    const actionSheetButtons = ref([
+      {
+        text: "Agregar a Favoritos",
+        role: "selected",
+        icon: heartOutline,
+        data: {
+          action: "addToFav",
+        },
+      },
+      {
+        text: "Agregar al Carro",
+        role: "selected",
+        icon: cartOutline,
+        data: {
+          action: "addToCart",
+        },
+      },
+      {
+        text: "Cancelar",
+        role: "cancel",
+        data: {
+          action: "cancel",
+        },
+      },
+    ]);
+
+    return {
+      actionSheetButtons,
+      isOpen,
+      goToMovieDetail,
+      loadMovies,
+      movies,
+      showOptions,
+    }
+  },
+
   data() {
-    return {};
+    return {
+      heartOutline,
+      cartOutline,
+      ellipsisHorizontal,
+    };
   },
 };
 </script>
 
 <style scoped>
+
 .explore-movies {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 32px;
+  gap: 16px;
   margin-inline: 5px;
 }
 
-.explore-movies img {
+.poster-image {
   border-radius: 6px;
   transition: transform 500ms;
   box-shadow: 6px 4px 6px 4px hsla(0, 0%, 0%, 0.2);
   width: 100%;
+  height: 238.5px;
 
   &:hover {
     transform: scale(1.08);
   }
 }
 
+
+
 ion-searchbar {
   --border-radius: 6px;
+  --background: #222;
 }
 </style>
