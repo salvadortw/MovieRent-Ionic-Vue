@@ -208,7 +208,6 @@ export default {
     IonBackButton,
     Swiper,
     SwiperSlide,
-    IonChip,
     IonModal,
   },
   setup() {
