@@ -43,6 +43,16 @@
             <span>{{ movie.release_date }}</span>
           </div>
 
+          <div class="flex flex-wrap gap-1 mb-4 ml-[-5px]">
+            <ion-chip
+              v-for="genre in movie.genres"
+              :key="genre.id"
+              color="primary"
+            >
+              {{ genre.name }}
+            </ion-chip>
+          </div>
+
           <p class="text-muted-foreground mb-4 opacity-80">
             {{ movie.overview }}
           </p>
@@ -50,7 +60,7 @@
           <h2 class="text-lg font-semibold mb-2 flex">
             Reparto
             <ion-icon
-              :icon="arrowForwardOutline"
+              :icon="chevronForwardOutline"
               class="ml-2 mt-1 text-white/80"
               @click="goToMovieDetail(movie.id)"
             ></ion-icon>
@@ -71,7 +81,7 @@
           >
             <swiper-slide v-for="actor in cast" :key="actor.id">
               <div
-                class="flex flex-col items-center justify-center text-center mb-4"
+                class="flex flex-col items-center justify-center text-center"
               >
                 <img
                   :src="'https://image.tmdb.org/t/p/w500' + actor.profile_path"
@@ -90,14 +100,48 @@
 
           <h2 class="text-lg font-semibold mb-2">Opciones de Alquiler</h2>
           <div class="space-y-2 mb-2">
-            <ion-button class="w-full font-semibold" color="primary"
-              >Alquilar por 24 horas - $1.900</ion-button
+            <ion-button
+              class="w-full font-semibold"
+              color="primary"
+              @click="openPurchaseModal(movie, 'rent', 48, 1900)"
+              >Alquilar por 48 horas - $1.900</ion-button
             >
             <ion-button
               class="w-full font-semibold bg-transparent border-solid border-[1px] border-blue-800 rounded-md hover:bg-black/5 dark:bg-transparent dark:hover:bg-white/5"
               fill="outline"
-              >Alquilar por 48 horas - $3.500</ion-button
+              @click="openPurchaseModal(movie, 'buy', 'always', 5500)"
+              >Comprar - $5.500</ion-button
             >
+
+            <ion-modal :is-open="isPurchaseModalOpen">
+              <div class="text-center m-auto">
+                <h2
+                  class="text-2xl font-bold mb-4 px-2"
+                  v-if="rentalHours === 'always'"
+                >
+                  ¿Deseas comprar esta película por {{ price }} pesos?
+                </h2>
+                <h2 class="text-2xl font-bold mb-4 px-2" v-else>
+                  ¿Deseas arrendar esta película por {{ rentalHours }} horas por
+                  {{ price }} pesos?
+                </h2>
+                <div class="p-8">
+                  <p class="text-xl font-medium mb-4">
+                    {{ selectedMovie?.title }}
+                  </p>
+                  <div class="flex items-center justify-between">
+                    <ion-button color="primary" @click="confirmPurchase"
+                      >Si</ion-button
+                    >
+                    <ion-button
+                      color="danger"
+                      @click="isPurchaseModalOpen = false"
+                      >No</ion-button
+                    >
+                  </div>
+                </div>
+              </div>
+            </ion-modal>
           </div>
         </div>
       </div>
@@ -120,6 +164,7 @@ import {
   IonBackButton,
   IonButtons,
   IonThumbnail,
+  IonModal,
 } from "@ionic/vue";
 
 // import Swiper core and required modules
@@ -136,14 +181,15 @@ import "swiper/css/scrollbar";
 import "swiper/css/effect-coverflow";
 
 import {
-  arrowForwardOutline,
   calendarOutline,
+  chevronForwardOutline,
   starOutline,
   timeOutline,
 } from "ionicons/icons";
 import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import { getDetailMovie, getCast } from "@/services/MovieServices";
+import { addMovieToPurchase } from "@/services/PurchaseServices";
 import type { DetailMovie, Cast } from "@/interfaces/Movie";
 import router from "@/router";
 
@@ -162,11 +208,56 @@ export default {
     IonBackButton,
     Swiper,
     SwiperSlide,
+    IonChip,
+    IonModal,
   },
   setup() {
+    const { addPurchase } = addMovieToPurchase();
     const route = useRoute();
     const movie = ref<DetailMovie | null>(null);
     const cast = ref<Cast[]>([]);
+    const selectedMovie = ref<Movie | null>(null);
+    const isPurchaseModalOpen = ref(false);
+    const rentalHours = ref<number | string | null>(null);
+    const price = ref<number | null>(null);
+
+    const openPurchaseModal = (
+      movie: Movie,
+      type: "buy" | "rent",
+      hours: number | "always",
+      priceValue: number
+    ) => {
+      selectedMovie.value = movie;
+      rentalHours.value = hours || null;
+      price.value = priceValue || null;
+      isPurchaseModalOpen.value = true;
+    };
+
+    const confirmPurchase = () => {
+      if (
+        !selectedMovie.value ||
+        rentalHours.value === null ||
+        price.value === null
+      ) {
+        return;
+      }
+
+      addPurchase({
+        movieId: selectedMovie.value.id,
+        movieTitle: selectedMovie.value.title,
+        type: rentalHours.value === "always" ? "buy" : "rent",
+        hours: rentalHours.value,
+        price: price.value,
+      });
+
+      const message =
+        rentalHours.value === "always"
+          ? `Has comprado la película ${selectedMovie.value.title} por ${price.value} pesos.`
+          : `Has arrendado la película ${selectedMovie.value.title} por ${rentalHours.value} horas por ${price.value} pesos.`;
+
+      alert(message);
+      isPurchaseModalOpen.value = false;
+    };
 
     const loadMovieDetails = async () => {
       const movieId = route.params.id;
@@ -193,6 +284,12 @@ export default {
       movie,
       cast,
       goToMovieDetail,
+      openPurchaseModal,
+      confirmPurchase,
+      selectedMovie,
+      isPurchaseModalOpen,
+      rentalHours,
+      price,
     };
   },
 
@@ -201,7 +298,7 @@ export default {
       calendarOutline,
       starOutline,
       timeOutline,
-      arrowForwardOutline,
+      chevronForwardOutline,
     };
   },
 };

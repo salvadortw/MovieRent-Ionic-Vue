@@ -1,11 +1,13 @@
+const API_TOKEN_KEY =
+  "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzMTU5NzkwMGI0MWY5NDJiMmY1MjQwNzlhYzA2MGYwMSIsIm5iZiI6MTcyOTM2MTcwNy43Njg0NzUsInN1YiI6IjY3MTNmNjU4MGNiNjI1MmY5OTA4NzA1OCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.d8v9UlQlD3OWPGUAf_ftwJvCV1l0dKxjk_fE3_bmRFg";
+
 // Obtener las películas
 export const getMovies = async () => {
   const options = {
     method: "GET",
     headers: {
       accept: "application/json",
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhYTQ5ODIyMjBjYzgyM2ExM2I2NWM3YWJiZTJhZmFiNCIsIm5iZiI6MTcyODU4OTQ4MS43NzExNTMsInN1YiI6IjY3MDE2MTAwNjdjNmZiMDlmZmY4NGNmMiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.IVnCKuXbpC8TJy9XU3mIixUAJhWJ_GEKEilzqVBMxCg",
+      Authorization: `Bearer ${API_TOKEN_KEY}`,
     },
   };
 
@@ -31,8 +33,7 @@ export const getFamilyMovies = async () => {
     method: "GET",
     headers: {
       accept: "application/json",
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhYTQ5ODIyMjBjYzgyM2ExM2I2NWM3YWJiZTJhZmFiNCIsIm5iZiI6MTcyODU4OTQ4MS43NzExNTMsInN1YiI6IjY3MDE2MTAwNjdjNmZiMDlmZmY4NGNmMiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.IVnCKuXbpC8TJy9XU3mIixUAJhWJ_GEKEilzqVBMxCg",
+      Authorization: `Bearer ${API_TOKEN_KEY}`,
     },
   };
 
@@ -58,8 +59,7 @@ export const getCrimeMovies = async () => {
     method: "GET",
     headers: {
       accept: "application/json",
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhYTQ5ODIyMjBjYzgyM2ExM2I2NWM3YWJiZTJhZmFiNCIsIm5iZiI6MTcyODU4OTQ4MS43NzExNTMsInN1YiI6IjY3MDE2MTAwNjdjNmZiMDlmZmY4NGNmMiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.IVnCKuXbpC8TJy9XU3mIixUAJhWJ_GEKEilzqVBMxCg",
+      Authorization: `Bearer ${API_TOKEN_KEY}`,
     },
   };
 
@@ -85,8 +85,7 @@ export const getThrillerMovies = async () => {
     method: "GET",
     headers: {
       accept: "application/json",
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhYTQ5ODIyMjBjYzgyM2ExM2I2NWM3YWJiZTJhZmFiNCIsIm5iZiI6MTcyODU4OTQ4MS43NzExNTMsInN1YiI6IjY3MDE2MTAwNjdjNmZiMDlmZmY4NGNmMiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.IVnCKuXbpC8TJy9XU3mIixUAJhWJ_GEKEilzqVBMxCg",
+      Authorization: `Bearer ${API_TOKEN_KEY}`,
     },
   };
 
@@ -112,8 +111,7 @@ export const getDetailMovie = async (movieId: number) => {
     method: "GET",
     headers: {
       accept: "application/json",
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhYTQ5ODIyMjBjYzgyM2ExM2I2NWM3YWJiZTJhZmFiNCIsIm5iZiI6MTcyODU4OTQ4MS43NzExNTMsInN1YiI6IjY3MDE2MTAwNjdjNmZiMDlmZmY4NGNmMiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.IVnCKuXbpC8TJy9XU3mIixUAJhWJ_GEKEilzqVBMxCg",
+      Authorization: `Bearer ${API_TOKEN_KEY}`,
     },
   };
 
@@ -140,8 +138,7 @@ export const getCast = async (movieId: number) => {
     method: "GET",
     headers: {
       accept: "application/json",
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhYTQ5ODIyMjBjYzgyM2ExM2I2NWM3YWJiZTJhZmFiNCIsIm5iZiI6MTcyODU4OTQ4MS43NzExNTMsInN1YiI6IjY3MDE2MTAwNjdjNmZiMDlmZmY4NGNmMiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.IVnCKuXbpC8TJy9XU3mIixUAJhWJ_GEKEilzqVBMxCg",
+      Authorization: `Bearer ${API_TOKEN_KEY}`,
     },
   };
 
@@ -168,8 +165,7 @@ export const getFullCast = async (movieId: number) => {
     method: "GET",
     headers: {
       accept: "application/json",
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhYTQ5ODIyMjBjYzgyM2ExM2I2NWM3YWJiZTJhZmFiNCIsIm5iZiI6MTcyODU4OTQ4MS43NzExNTMsInN1YiI6IjY3MDE2MTAwNjdjNmZiMDlmZmY4NGNmMiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.IVnCKuXbpC8TJy9XU3mIixUAJhWJ_GEKEilzqVBMxCg",
+      Authorization: `Bearer ${API_TOKEN_KEY}`,
     },
   };
 
@@ -196,8 +192,7 @@ export const getTopRated = async () => {
     method: "GET",
     headers: {
       accept: "application/json",
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhYTQ5ODIyMjBjYzgyM2ExM2I2NWM3YWJiZTJhZmFiNCIsIm5iZiI6MTcyODU4OTQ4MS43NzExNTMsInN1YiI6IjY3MDE2MTAwNjdjNmZiMDlmZmY4NGNmMiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.IVnCKuXbpC8TJy9XU3mIixUAJhWJ_GEKEilzqVBMxCg",
+      Authorization: `Bearer ${API_TOKEN_KEY}`,
     },
   };
 
@@ -217,3 +212,31 @@ export const getTopRated = async () => {
     throw err;
   }
 };
+
+// Obtener los géneros
+export const getGenres = async () => {
+  const options = {
+    method: "GET",
+    headers: {
+      accept: "application/json",
+      Authorization: `Bearer ${API_TOKEN_KEY}`,
+    },
+  };
+
+  try {
+    const response = await fetch(
+      "https://api.themoviedb.org/3/genre/movie/list?language=es",
+      options
+    );
+
+    if (!response.ok) {
+      throw new Error("Error en la solicitud: " + response.statusText);
+    }
+    const data = await response.json();
+    return data;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+};
+

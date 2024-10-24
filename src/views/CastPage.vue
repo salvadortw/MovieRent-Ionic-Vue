@@ -21,7 +21,10 @@
               </ion-img>
             </ion-thumbnail>
             <ion-label class="ml-4">
-              {{ actor.name }}
+              <div>
+                <p class="text-base font-semibold">{{ actor.name }}</p>
+                <p class="text-sm opacity-70">{{ actor.character }}</p>
+              </div>
             </ion-label>
           </ion-item>
         </ion-list>

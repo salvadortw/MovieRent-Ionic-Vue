@@ -28,46 +28,26 @@
         :modules="modules"
         class="mySwiper"
       >
-        <swiper-slide
-          ><img src="/public/images/slide-1.webp" alt=""
-        /></swiper-slide>
-        <swiper-slide
-          ><img src="/public/images/slide-2.webp" alt=""
-        /></swiper-slide>
-        <swiper-slide
-          ><img src="/public/images/slide-3.webp" alt=""
-        /></swiper-slide>
-        <swiper-slide
-          ><img src="/public/images/slide-1.webp" alt=""
-        /></swiper-slide>
-        <swiper-slide
-          ><img src="/public/images/slide-2.webp" alt=""
-        /></swiper-slide>
-        <swiper-slide
-          ><img src="/public/images/slide-3.webp" alt=""
-        /></swiper-slide>
-        <swiper-slide
-          ><img src="/public/images/slide-1.webp" alt=""
-        /></swiper-slide>
-        <swiper-slide
-          ><img src="/public/images/slide-2.webp" alt=""
-        /></swiper-slide>
-        <swiper-slide
-          ><img src="/public/images/slide-3.webp" alt=""
-        /></swiper-slide>
+        <swiper-slide v-for="(movie, i) in movies" :key="movie.id">
+          <img
+            :src="'https://image.tmdb.org/t/p/w500' + movie.backdrop_path"
+            alt="Movie Poster"
+            class="img-swiper"
+          />
+        </swiper-slide>
       </swiper>
 
       <div class="search px-2 mt-3">
         <ion-searchbar
           placeholder="Buscar películas, géneros..."
         ></ion-searchbar>
-        <h3 class="font-semibold text-xl mx-2">Categorías</h3>
-        <div class="categories ml-1">
+        <!-- <h3 class="font-semibold text-xl mx-2">Categorías</h3> -->
+        <!-- <div class="categories ml-1">
           <ion-chip color="primary" class="font-semibold">Acción</ion-chip>
           <ion-chip>Terror</ion-chip>
           <ion-chip>Drama</ion-chip>
           <ion-chip>Comedia</ion-chip>
-        </div>
+        </div> -->
       </div>
 
       <h3 class="font-semibold text-lg ml-4">Películas Populares</h3>
@@ -92,17 +72,15 @@
             <img
               :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path"
               alt="Movie Poster"
-              class="w-full h-auto rounded-lg "
+              class="w-full h-auto rounded-lg"
               @click="goToMovieDetail(movie.id)"
-            ></img>
+            />
             <div class="flex items-center justify-between px-[2px]">
               <h4 class="text-base font-semibold truncate w-24">
                 {{ movie.title }}
               </h4>
               <button class="mt-3" @click="showOptions(movie)">
-                <ion-icon
-                  :icon="ellipsisHorizontal"
-                ></ion-icon>
+                <ion-icon :icon="ellipsisHorizontal"></ion-icon>
               </button>
             </div>
           </swiper-slide>
@@ -141,15 +119,13 @@
               alt="Movie Poster"
               class="w-full h-auto rounded-lg"
               @click="goToMovieDetail(movie.id)"
-            ></img>
+            />
             <div class="flex items-center justify-between px-[2px]">
               <h4 class="text-base font-semibold truncate w-24">
                 {{ movie.title }}
               </h4>
               <button class="mt-3" @click="showOptions(movie)">
-                <ion-icon
-                  :icon="ellipsisHorizontal"
-                ></ion-icon>
+                <ion-icon :icon="ellipsisHorizontal"></ion-icon>
               </button>
             </div>
           </swiper-slide>
@@ -180,15 +156,13 @@
               alt="Movie Poster"
               class="w-full h-auto rounded-lg"
               @click="goToMovieDetail(movie.id)"
-            ></img>
+            />
             <div class="flex items-center justify-between px-[2px]">
               <h4 class="text-base font-semibold truncate w-24">
                 {{ movie.title }}
               </h4>
               <button class="mt-3" @click="showOptions(movie)">
-                <ion-icon
-                  :icon="ellipsisHorizontal"
-                ></ion-icon>
+                <ion-icon :icon="ellipsisHorizontal"></ion-icon>
               </button>
             </div>
           </swiper-slide>
@@ -219,15 +193,13 @@
               alt="Movie Poster"
               class="w-full h-auto rounded-lg"
               @click="goToMovieDetail(movie.id)"
-            ></img>
+            />
             <div class="flex items-center justify-between px-[2px]">
               <h4 class="text-base font-semibold truncate w-24">
                 {{ movie.title }}
               </h4>
               <button class="mt-3" @click="showOptions(movie)">
-                <ion-icon
-                  :icon="ellipsisHorizontal"
-                ></ion-icon>
+                <ion-icon :icon="ellipsisHorizontal"></ion-icon>
               </button>
             </div>
           </swiper-slide>
@@ -277,8 +249,13 @@ import {
 import { cartOutline, ellipsisHorizontal, heartOutline } from "ionicons/icons";
 
 import { onMounted, ref } from "vue";
-import type { Movie } from "@/interfaces/Movie";
-import { getThrillerMovies, getCrimeMovies, getFamilyMovies, getMovies } from "@/services/MovieServices";
+import { Movie } from "@/interfaces/Movie";
+import {
+  getThrillerMovies,
+  getCrimeMovies,
+  getFamilyMovies,
+  getMovies,
+} from "@/services/MovieServices";
 import { useRouter } from "vue-router";
 
 export default {
@@ -422,10 +399,15 @@ export default {
 </script>
 
 <style scoped>
+.img-swiper {
+  width: 100%;
+  height: 200px;
+}
+
 img {
   width: 100%;
   height: 340px;
-  border-radius: 6px
+  border-radius: 6px;
 }
 
 a {
@@ -434,11 +416,6 @@ a {
 
 h4 {
   font-size: 16;
-}
-
-.mySwiper img {
-  height: 150px;
-  margin: auto;
 }
 
 @media (width > 900px) {

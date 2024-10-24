@@ -10,17 +10,27 @@
     </ion-header>
     <ion-content>
       <header class="search-movies">
-        <div class="flex space-x-2">
-          <ion-searchbar placeholder="Buscar películas..."></ion-searchbar>
+        <div class="flex space-x-2 mt-4">
+          <ion-searchbar
+            placeholder="Buscar películas, géneros..."
+          ></ion-searchbar>
         </div>
-        <div class="filters grid grid-cols-2 gap-4 mb-4 px-2 mt-5">
+        <div class="grid grid-cols-2 gap-4 mb-4 px-2 mt-5">
           <ion-list class="rounded-lg">
             <ion-item>
-              <ion-select aria-label="genero" placeholder="Género">
-                <ion-select-option value="accion">Acción</ion-select-option>
-                <ion-select-option value="terror">Terror</ion-select-option>
-                <ion-select-option value="comedia">Comedia</ion-select-option>
-                <ion-select-option value="drama">Drama</ion-select-option>
+              <ion-select
+                aria-label="genero"
+                placeholder="Género"
+                v-model="selectedGenre"
+                @ion-change="filterMoviesByGenre"
+              >
+                <ion-select-option
+                  :value="genre.id"
+                  v-for="genre in genres"
+                  :key="genre.id"
+                >
+                  {{ genre.name }}
+                </ion-select-option>
               </ion-select>
             </ion-item>
           </ion-list>
@@ -39,23 +49,21 @@
       </header>
 
       <section class="explore-movies mb-2">
-        <div class="px-1" v-for="movie in movies" :key="movie.id">
+        <div class="px-1" v-for="movie in filteredMovies" :key="movie.id">
           <img
-              :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path"
-              alt="Movie Poster"
-              @click="goToMovieDetail(movie.id)"
-              class="poster-image"
-            ></img>
-            <div class="flex items-center justify-between px-[2px]">
-              <h4 class="text-base font-semibold">
-                {{ movie.title }}
-              </h4>
-              <button class="mt-3" @click="showOptions(movie)">
-                <ion-icon
-                  :icon="ellipsisHorizontal"
-                ></ion-icon>
-              </button>
-            </div>
+            :src="'https://image.tmdb.org/t/p/w500' + movie.poster_path"
+            alt="Movie Poster"
+            @click="goToMovieDetail(movie.id)"
+            class="poster-image"
+          />
+          <div class="flex items-center justify-between px-[2px]">
+            <h4 class="text-base font-semibold">
+              {{ movie.title }}
+            </h4>
+            <button class="mt-3" @click="showOptions(movie)">
+              <ion-icon :icon="ellipsisHorizontal"></ion-icon>
+            </button>
+          </div>
         </div>
 
         <ion-action-sheet
@@ -90,8 +98,8 @@ import {
 } from "@ionic/vue";
 
 import { onMounted, ref } from "vue";
-import { Movie } from "@/interfaces/Movie";
-import { getTopRated } from "@/services/MovieServices";
+import type { Movie, Genre } from "@/interfaces/Movie";
+import { getTopRated, getGenres } from "@/services/MovieServices";
 import { useRouter } from "vue-router";
 
 import { ellipsisHorizontal, cartOutline, heartOutline } from "ionicons/icons";
@@ -120,13 +128,36 @@ export default {
     const isOpen = ref(false);
     const selectedMovie = ref(null);
     const router = useRouter();
+    const genres = ref<Genre[]>([]);
+    const filteredMovies = ref<Movie[]>([]);
+    const selectedGenre = ref<number | null>(null);
 
     const getData = async () => {
       try {
         const response = await getTopRated();
         movies.value = response.results;
+        filteredMovies.value = response.results;
       } catch (error) {
         console.log(error);
+      }
+    };
+
+    const getDataGenre = async () => {
+      try {
+        const response = await getGenres();
+        genres.value = response.genres;
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    const filterMoviesByGenre = () => {
+      if (selectedGenre.value) {
+        filteredMovies.value = movies.value.filter((movie) =>
+          movie.genre_ids.includes(selectedGenre.value!)
+        );
+      } else {
+        filteredMovies.value = movies.value;
       }
     };
 
@@ -142,6 +173,7 @@ export default {
     onMounted(() => {
       getData();
       loadMovies();
+      getDataGenre();
     });
 
     const showOptions = (movie: any) => {
@@ -182,7 +214,11 @@ export default {
       loadMovies,
       movies,
       showOptions,
-    }
+      genres,
+      filterMoviesByGenre,
+      selectedGenre,
+      filteredMovies,
+    };
   },
 
   data() {
@@ -196,7 +232,6 @@ export default {
 </script>
 
 <style scoped>
-
 .explore-movies {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -215,8 +250,6 @@ export default {
     transform: scale(1.08);
   }
 }
-
-
 
 ion-searchbar {
   --border-radius: 6px;

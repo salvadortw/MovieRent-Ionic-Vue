@@ -2,6 +2,7 @@ export interface Movie {
   id: number;
   title: string;
   poster_path: string;
+  backdrop_path: string;
 }
 
 export interface DetailMovie extends Movie {
@@ -9,7 +10,7 @@ export interface DetailMovie extends Movie {
   release_date: string;
   vote_average: number;
   runtime: number;
-  backdrop_path: string;
+  genre: Genre[];
 }
 
 export interface Cast {
@@ -17,4 +18,9 @@ export interface Cast {
   name: string;
   profile_path: string | null;
   character: string;
+}
+
+export interface Genre {
+  id: number;
+  name: string;
 }
