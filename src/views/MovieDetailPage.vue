@@ -45,7 +45,7 @@
 
           <div class="flex flex-wrap gap-1 mb-4 ml-[-5px]">
             <ion-chip
-              v-for="genre in movie.genres"
+              v-for="genre in movie.genre"
               :key="genre.id"
               color="primary"
             >
