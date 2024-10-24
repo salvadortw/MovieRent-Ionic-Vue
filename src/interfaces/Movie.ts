@@ -3,6 +3,7 @@ export interface Movie {
   title: string;
   poster_path: string;
   backdrop_path: string;
+  genre_ids: number[];
 }
 
 export interface DetailMovie extends Movie {

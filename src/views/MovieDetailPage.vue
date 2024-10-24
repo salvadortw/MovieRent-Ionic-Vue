@@ -190,7 +190,7 @@ import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import { getDetailMovie, getCast } from "@/services/MovieServices";
 import { addMovieToPurchase } from "@/services/PurchaseServices";
-import type { DetailMovie, Cast } from "@/interfaces/Movie";
+import type { DetailMovie, Cast, Movie } from "@/interfaces/Movie";
 import router from "@/router";
 
 export default {
