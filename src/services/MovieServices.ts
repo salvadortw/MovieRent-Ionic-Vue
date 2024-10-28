@@ -1,6 +1,4 @@
-require("dotenv").config();
-
-const API_TOKEN_KEY = process.env.TMDB_API_KEY;
+const API_TOKEN_KEY = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzMTU5NzkwMGI0MWY5NDJiMmY1MjQwNzlhYzA2MGYwMSIsIm5iZiI6MTcyOTM2MTcwNy43Njg0NzUsInN1YiI6IjY3MTNmNjU4MGNiNjI1MmY5OTA4NzA1OCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.d8v9UlQlD3OWPGUAf_ftwJvCV1l0dKxjk_fE3_bmRFg";
 
 // Obtener las películas
 export const getMovies = async () => {
