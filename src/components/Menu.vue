@@ -19,6 +19,11 @@
           </button>
         </ion-item>
       </ion-list>
+
+      <ion-button expand="full" fill="clear" @click="handleAuthAction" class="mt-4" :class="authButtonClass">
+        <ion-icon :icon="authIcon"></ion-icon>
+        <span class="ml-2">{{ authButtonText }}</span>
+      </ion-button>
     </ion-content>
   </ion-menu>
 </template>
@@ -40,8 +45,7 @@ import {
   IonList,
   menuController,
 } from "@ionic/vue";
-import { defineComponent } from "vue";
-
+import { defineComponent, ref, computed } from "vue";
 import {
   eyeOutline,
   logInOutline,
@@ -50,6 +54,7 @@ import {
   callOutline,
   informationCircleOutline,
 } from "ionicons/icons";
+import AuthServices from "@/services/AuthServices"; // Asegúrate de que la ruta sea correcta
 
 export default defineComponent({
   components: {
@@ -68,42 +73,54 @@ export default defineComponent({
     IonList,
   },
 
-  data() {
-    return {
-      views: [
-        {
-          title: "Historial de Alquileres",
-          icon: eyeOutline,
-          url: "/historial",
-        },
-        { title: "Favoritos", icon: heartOutline, url: "/favoritos" },
-        {
-          title: "Configuración",
-          icon: settingsOutline,
-          url: "/configuracion",
-        },
-        { title: "Contacto", icon: callOutline, url: "/contacto" },
-        {
-          title: "Quiénes Somos",
-          icon: informationCircleOutline,
-          url: "/sobreNosotros",
-        },
-        {
-          title: "Iniciar Sesión",
-          icon: logInOutline,
-          url: "/login",
-          class: "text-blue-500",
-        },
-      ],
-      close,
-    };
-  },
+  setup() {
+    const user = ref(AuthServices.getCurrentUser());
 
-  methods: {
-    menuNavegation(url: string) {
-      menuController.close("app-menu");
-      this.$router.push(url);
-    },
+    const views = [
+      {
+        title: "Historial de Alquileres",
+        icon: eyeOutline,
+        url: "/historial",
+      },
+      { title: "Favoritos", icon: heartOutline, url: "/favoritos" },
+      {
+        title: "Configuración",
+        icon: settingsOutline,
+        url: "/configuracion",
+      },
+      { title: "Contacto", icon: callOutline, url: "/contacto" },
+      {
+        title: "Quiénes Somos",
+        icon: informationCircleOutline,
+        url: "/sobreNosotros",
+      },
+    ];
+
+    const authButtonText = computed(() => (user.value ? "Cerrar Sesión" : "Iniciar Sesión"));
+    const authIcon = computed(() => (user.value ? logInOutline : logInOutline)); // Usa el mismo icono para ambos
+    const authButtonClass = computed(() => (user.value ? "text-red-500" : "text-blue-500"));
+
+    const handleAuthAction = async () => {
+      if (user.value) {
+        await AuthServices.logoutUser();
+        user.value = null; // Actualizar el usuario
+      } else {
+        menuController.close("app-menu");
+        this.$router.push("/login");
+      }
+    };
+
+    return {
+      views,
+      menuNavegation: (url: string) => {
+        menuController.close("app-menu");
+        this.$router.push(url);
+      },
+      handleAuthAction,
+      authButtonText,
+      authIcon,
+      authButtonClass,
+    };
   },
 });
 </script>

@@ -16,10 +16,9 @@
             alt=""
             class="rounded-full w-20 h-20 mt-2"
           />
-
           <div>
-            <h2 class="text-xl font-semibold">Nombre de Usuario</h2>
-            <p class="text-muted-foreground opacity-60">correo@ejemplo.com</p>
+            <h2 class="text-xl font-semibold">{{ username }}</h2>
+            <p class="text-muted-foreground opacity-60">{{ email }}</p>
           </div>
         </div>
 
@@ -47,6 +46,7 @@
           </ion-button>
 
           <ion-button
+            v-if="!isLoggedIn"
             router-link="/login"
             class="custom-button text-blue-500"
             expand="block"
@@ -54,6 +54,17 @@
           >
             <ion-icon :icon="logInOutline" class="mr-2 h-4 w-4"></ion-icon>
             <span class="text-center">Iniciar Sesión</span>
+          </ion-button>
+
+          <ion-button
+            v-if="isLoggedIn"
+            @click="handleLogout"
+            class="custom-button text-red-500"
+            expand="block"
+            fill="default"
+          >
+            <ion-icon :icon="logOutOutline" class="mr-2 h-4 w-4"></ion-icon>
+            <span class="text-center">Cerrar Sesión</span>
           </ion-button>
         </div>
       </main>
@@ -75,15 +86,14 @@ import {
   IonMenuButton,
   IonButtons,
 } from "@ionic/vue";
-
 import {
   cardOutline,
-  filmOutline,
   logInOutline,
+  logOutOutline,
   personOutline,
-  settingsOutline,
-  heartOutline,
 } from "ionicons/icons";
+import { ref, onMounted } from "vue";
+import AuthServices from "@/services/AuthServices"; // Asegúrate de que la ruta sea correcta
 
 export default {
   components: {
@@ -92,22 +102,50 @@ export default {
     IonTitle,
     IonContent,
     IonPage,
-    IonAvatar,
-    personOutline,
     IonButton,
     IonIcon,
     IonText,
     IonMenuButton,
     IonButtons,
   },
-  data() {
+  setup() {
+    const isLoggedIn = ref(false);
+    const username = ref("");
+    const email = ref("");
+
+    const checkUserStatus = async () => {
+      try {
+        const user = await AuthServices.getCurrentUser(); // Asegúrate de tener un método para obtener el usuario actual
+        if (user) {
+          isLoggedIn.value = true;
+          username.value = user.username;
+          email.value = user.email;
+        }
+      } catch (error) {
+        console.error("Error al verificar el estado del usuario:", error);
+      }
+    };
+
+    const handleLogout = async () => {
+      await AuthServices.logoutUser(); // Asegúrate de implementar esta función en AuthServices
+      isLoggedIn.value = false;
+      username.value = "";
+      email.value = "";
+    };
+
+    onMounted(() => {
+      checkUserStatus();
+    });
+
     return {
+      isLoggedIn,
+      username,
+      email,
+      handleLogout,
       personOutline,
       cardOutline,
-      filmOutline,
-      settingsOutline,
       logInOutline,
-      heartOutline,
+      logOutOutline,
     };
   },
 };
@@ -137,5 +175,4 @@ ion-button {
   --padding-top: 12px;
   --padding-bottom: 12px;
 }
-
 </style>

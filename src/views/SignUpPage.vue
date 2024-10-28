@@ -1,5 +1,3 @@
-<style scoped></style>
-
 <template>
   <ion-page>
     <ion-header>
@@ -18,39 +16,25 @@
           <div class="text-center">
             <h2 class="mt-14 text-3xl font-bold text-primary">MovieRent</h2>
             <p class="mt-2 text-sm text-muted-foreground">
-              Registrate para alquilar películas
+              Regístrate para alquilar películas
             </p>
           </div>
-
-          <form action="" class="mt-8 space-y-6">
+          <form @submit.prevent="handleRegister" class="mt-8 space-y-6">
             <div class="space-y-4 rounded-md shadow-sm">
               <div>
                 <ion-input
-                  ref="input"
+                  v-model="username"
                   type="text"
                   fill="solid"
-                  label="Nombre"
+                  label="Nombre de Usuario"
                   label-placement="floating"
-                  placeholder="Ej: Alonso"
+                  placeholder="Ej: Alonso01"
                   class="mt-1"
                 ></ion-input>
               </div>
-
               <div>
                 <ion-input
-                  ref="input"
-                  type="text"
-                  fill="solid"
-                  label="Apellido"
-                  label-placement="floating"
-                  placeholder="Ej: Rojas"
-                  class="mt-1"
-                ></ion-input>
-              </div>
-
-              <div>
-                <ion-input
-                  ref="input"
+                  v-model="email"
                   type="email"
                   fill="solid"
                   label="Email"
@@ -59,9 +43,20 @@
                   class="mt-1"
                 ></ion-input>
               </div>
-
               <div>
                 <ion-input
+                  v-model="name"
+                  type="text"
+                  fill="solid"
+                  label="Nombre"
+                  label-placement="floating"
+                  placeholder="Ej: Alonso"
+                  class="mt-1"
+                ></ion-input>
+              </div>
+              <div>
+                <ion-input
+                  v-model="password"
                   label="Contraseña"
                   label-placement="floating"
                   fill="solid"
@@ -70,31 +65,47 @@
                   class="mt-1"
                 ></ion-input>
               </div>
+              <div>
+                <ion-input
+                  v-model="passwordConfirm"
+                  label="Confirma Contraseña"
+                  label-placement="floating"
+                  fill="solid"
+                  placeholder="Confirma tu contraseña"
+                  type="password"
+                  class="mt-1"
+                ></ion-input>
+              </div>
             </div>
-
             <div class="text-center">
               <ion-button
-              class="font-semibold rounded-md"
+                class="font-semibold rounded-md"
                 type="submit"
                 expand="full"
+                >Registrate</ion-button
               >
-                Registrate
-              </ion-button>
             </div>
           </form>
-
           <div class="text-center">
             <p class="mt-2 text-sm text-muted-foreground">
               ¿Ya tienes una cuenta?
               <router-link
                 to="/login"
                 class="font-medium text-primary hover:text-primary/80"
+                >Inicia Sesión</router-link
               >
-                Inicia Sesión
-              </router-link>
             </p>
           </div>
         </div>
+
+        <ion-alert
+          v-if="showAlert"
+          :is-open="showAlert"
+          @didDismiss="() => (showAlert = false)"
+          header="Error"
+          message="{{ errorMessage }}"
+          :buttons="[{ text: 'Aceptar' }]"
+        />
       </main>
     </ion-content>
   </ion-page>
@@ -111,8 +122,11 @@ import {
   IonButtons,
   IonBackButton,
   IonButton,
+  IonAlert,
 } from "@ionic/vue";
-
+import { ref } from "vue";
+import AuthServices from "@/services/AuthServices"; // Asegúrate de que la importación sea correcta
+import { useRouter } from "vue-router";
 import { arrowBackOutline } from "ionicons/icons";
 
 export default {
@@ -126,6 +140,50 @@ export default {
     IonButtons,
     IonBackButton,
     IonButton,
+    IonAlert,
+  },
+  setup() {
+    const username = ref("");
+    const email = ref("");
+    const name = ref("");
+    const password = ref("");
+    const passwordConfirm = ref("");
+    const showAlert = ref(false);
+    const errorMessage = ref("");
+    const router = useRouter();
+
+    const handleRegister = async () => {
+      try {
+        if (password.value !== passwordConfirm.value) {
+          showAlert.value = true;
+          errorMessage.value = "Las contraseñas no coinciden";
+          return;
+        }
+        await AuthServices.registerUser(
+          username.value,
+          email.value,
+          name.value,
+          password.value,
+          passwordConfirm.value
+        );
+        // Redirigir o mostrar un mensaje de éxito
+        router.push("/login");
+      } catch (error: any) {
+        showAlert.value = true;
+        errorMessage.value = error.message || "Error desconocido";
+      }
+    };
+
+    return {
+      username,
+      email,
+      name,
+      password,
+      passwordConfirm,
+      handleRegister,
+      showAlert,
+      errorMessage,
+    };
   },
   data() {
     return {
@@ -134,3 +192,5 @@ export default {
   },
 };
 </script>
+
+<style scoped></style>
