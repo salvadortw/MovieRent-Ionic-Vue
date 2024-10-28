@@ -13,14 +13,20 @@
         lines="none"
       >
         <ion-item button @click="menuNavegation(item.url)" class="px-2">
-          <button class="flex" :class="item.class">
+          <button class="flex">
             <ion-icon :icon="item.icon"></ion-icon>
             <span class="ml-2"> {{ item.title }} </span>
           </button>
         </ion-item>
       </ion-list>
 
-      <ion-button expand="full" fill="clear" @click="handleAuthAction" class="mt-4" :class="authButtonClass">
+      <ion-button
+        expand="full"
+        fill="clear"
+        @click="handleAuthAction"
+        class="mt-4"
+        :class="authButtonClass"
+      >
         <ion-icon :icon="authIcon"></ion-icon>
         <span class="ml-2">{{ authButtonText }}</span>
       </ion-button>
@@ -54,7 +60,8 @@ import {
   callOutline,
   informationCircleOutline,
 } from "ionicons/icons";
-import AuthServices from "@/services/AuthServices"; // Asegúrate de que la ruta sea correcta
+import AuthServices from "@/services/AuthServices";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   components: {
@@ -75,6 +82,7 @@ export default defineComponent({
 
   setup() {
     const user = ref(AuthServices.getCurrentUser());
+    const router = useRouter();
 
     const views = [
       {
@@ -96,17 +104,21 @@ export default defineComponent({
       },
     ];
 
-    const authButtonText = computed(() => (user.value ? "Cerrar Sesión" : "Iniciar Sesión"));
-    const authIcon = computed(() => (user.value ? logInOutline : logInOutline)); // Usa el mismo icono para ambos
-    const authButtonClass = computed(() => (user.value ? "text-red-500" : "text-blue-500"));
+    const authButtonText = computed(() =>
+      user.value ? "Cerrar Sesión" : "Iniciar Sesión"
+    );
+    const authIcon = computed(() => (user.value ? logInOutline : logInOutline));
+    const authButtonClass = computed(() =>
+      user.value ? "text-red-500" : "text-blue-500"
+    );
 
     const handleAuthAction = async () => {
       if (user.value) {
         await AuthServices.logoutUser();
-        user.value = null; // Actualizar el usuario
+        user.value = null;
       } else {
         menuController.close("app-menu");
-        this.$router.push("/login");
+        router.push("/login");
       }
     };
 
@@ -114,7 +126,7 @@ export default defineComponent({
       views,
       menuNavegation: (url: string) => {
         menuController.close("app-menu");
-        this.$router.push(url);
+        router.push(url);
       },
       handleAuthAction,
       authButtonText,
