@@ -102,8 +102,7 @@ import {
 
 import { arrowBackOutline } from "ionicons/icons";
 import { ref } from "vue";
-// import { loginUser } from "@/services/AuthServices";
-import AuthServices from "@/services/AuthServices"; 
+import AuthServices from "@/services/AuthServices";
 import { useRouter } from "vue-router";
 
 export default {
@@ -120,20 +119,19 @@ export default {
     IonAlert,
   },
   setup() {
-    const email = ref('');
-    const password = ref('');
+    const email = ref("");
+    const password = ref("");
     const showAlert = ref(false);
-    const errorMessage = ref('');
+    const errorMessage = ref("");
     const router = useRouter();
 
     const loginUser = async () => {
       try {
         await AuthServices.loginUser(email.value, password.value);
-        // Redirigir o mostrar un mensaje de éxito
-        router.push('/home'); // Cambia esto a la ruta que desees después de iniciar sesión
+        router.push("/home");
       } catch (error: any) {
         showAlert.value = true;
-        errorMessage.value = error.message || 'Error desconocido';
+        errorMessage.value = error.message || "Error desconocido";
       }
     };
 

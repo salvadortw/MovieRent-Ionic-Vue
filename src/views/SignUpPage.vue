@@ -125,7 +125,7 @@ import {
   IonAlert,
 } from "@ionic/vue";
 import { ref } from "vue";
-import AuthServices from "@/services/AuthServices"; // Asegúrate de que la importación sea correcta
+import AuthServices from "@/services/AuthServices";
 import { useRouter } from "vue-router";
 import { arrowBackOutline } from "ionicons/icons";
 
@@ -166,7 +166,6 @@ export default {
           password.value,
           passwordConfirm.value
         );
-        // Redirigir o mostrar un mensaje de éxito
         router.push("/login");
       } catch (error: any) {
         showAlert.value = true;

@@ -93,7 +93,7 @@ import {
   personOutline,
 } from "ionicons/icons";
 import { ref, onMounted } from "vue";
-import AuthServices from "@/services/AuthServices"; // Asegúrate de que la ruta sea correcta
+import AuthServices from "@/services/AuthServices";
 
 export default {
   components: {
@@ -115,7 +115,7 @@ export default {
 
     const checkUserStatus = async () => {
       try {
-        const user = await AuthServices.getCurrentUser(); // Asegúrate de tener un método para obtener el usuario actual
+        const user = await AuthServices.getCurrentUser();
         if (user) {
           isLoggedIn.value = true;
           username.value = user.username;
@@ -127,7 +127,7 @@ export default {
     };
 
     const handleLogout = async () => {
-      await AuthServices.logoutUser(); // Asegúrate de implementar esta función en AuthServices
+      await AuthServices.logoutUser();
       isLoggedIn.value = false;
       username.value = "";
       email.value = "";
