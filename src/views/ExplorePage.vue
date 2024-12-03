@@ -25,11 +25,11 @@
                 @ion-change="filterMoviesByGenre"
               >
                 <ion-select-option
-                  :value="genre.id"
-                  v-for="genre in genres"
-                  :key="genre.id"
+                  :value="genres.id"
+                  v-for="genres in genres"
+                  :key="genres.id"
                 >
-                  {{ genre.name }}
+                  {{ genres.name }}
                 </ion-select-option>
               </ion-select>
             </ion-item>
@@ -98,7 +98,7 @@ import {
 } from "@ionic/vue";
 
 import { onMounted, ref } from "vue";
-import type { Movie, Genre } from "@/interfaces/Movie";
+import type { Movie, Genres } from "@/interfaces/Movie";
 import { getTopRated, getGenres } from "@/services/MovieServices";
 import { useRouter } from "vue-router";
 
@@ -128,7 +128,7 @@ export default {
     const isOpen = ref(false);
     const selectedMovie = ref(null);
     const router = useRouter();
-    const genres = ref<Genre[]>([]);
+    const genres = ref<Genres[]>([]);
     const filteredMovies = ref<Movie[]>([]);
     const selectedGenre = ref<number | null>(null);
 
