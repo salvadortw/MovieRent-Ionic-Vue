@@ -1,4 +1,4 @@
-const API_TOKEN_KEY = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzMTU5NzkwMGI0MWY5NDJiMmY1MjQwNzlhYzA2MGYwMSIsIm5iZiI6MTcyOTM2MTcwNy43Njg0NzUsInN1YiI6IjY3MTNmNjU4MGNiNjI1MmY5OTA4NzA1OCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.d8v9UlQlD3OWPGUAf_ftwJvCV1l0dKxjk_fE3_bmRFg";
+const API_TOKEN_KEY = import.meta.env.VITE_TMDB_API_KEY;
 
 // Obtener las películas
 export const getMovies = async () => {
@@ -19,6 +19,7 @@ export const getMovies = async () => {
       throw new Error("Error en la solicitud: " + response.statusText);
     }
     const data = await response.json();
+    console.log(data);
     return data;
   } catch (err) {
     console.error(err);
@@ -232,9 +233,36 @@ export const getGenres = async () => {
       throw new Error("Error en la solicitud: " + response.statusText);
     }
     const data = await response.json();
+    console.log(data);
+    
     return data;
   } catch (err) {
     console.error(err);
     throw err;
   }
 };
+
+// Buscar películas
+export const searchMovies = async (query: string) => {
+  const options = {
+    method: "GET",
+    headers: {
+      accept: "application/json",
+      Authorization: `Bearer ${API_TOKEN_KEY}`,
+    },
+  };
+  try {
+    const response = await fetch(
+      `https://api.themoviedb.org/3/search/movie?query=${query}&language=es-MX&page=1`,
+      options
+    );
+    if (!response.ok) {
+      throw new Error("Error en la solicitud: " + response.statusText);
+    }
+    const data = await response.json();
+    return data;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  } 
+}; 

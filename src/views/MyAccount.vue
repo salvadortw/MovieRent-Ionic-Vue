@@ -13,10 +13,10 @@
         <div class="flex items-center space-x-4 mb-8">
           <img
             src="https://ionicframework.com/docs/img/demos/avatar.svg"
-            alt=""
+            alt="Avatar"
             class="rounded-full w-20 h-20 mt-2"
           />
-          <div>
+          <div v-if="username && email">
             <h2 class="text-xl font-semibold">{{ username }}</h2>
             <p class="text-muted-foreground opacity-60">{{ email }}</p>
           </div>
@@ -79,7 +79,6 @@ import {
   IonTitle,
   IonContent,
   IonPage,
-  IonAvatar,
   IonButton,
   IonIcon,
   IonText,
@@ -92,8 +91,10 @@ import {
   logOutOutline,
   personOutline,
 } from "ionicons/icons";
-import { ref, onMounted } from "vue";
-import AuthServices from "@/services/AuthServices";
+import { logoutUser, getCurrentUser } from "@/services/AuthServices";
+import { ref, onMounted, watchEffect } from "vue";
+import { useRouter } from "vue-router";
+import { useToast } from "vue-toastification";
 
 export default {
   components: {
@@ -109,33 +110,48 @@ export default {
     IonButtons,
   },
   setup() {
-    const isLoggedIn = ref(false);
-    const username = ref("");
-    const email = ref("");
+    const username = ref<string>("");
+    const email = ref<string>("");
+    const isLoggedIn = ref<boolean>(false);
+
+    const toast = useToast();
+    const router = useRouter();
 
     const checkUserStatus = async () => {
       try {
-        const user = await AuthServices.getCurrentUser();
+        const user = await getCurrentUser();
         if (user) {
           isLoggedIn.value = true;
-          username.value = user.username;
+          username.value = user.name;
           email.value = user.email;
+        } else {
+          isLoggedIn.value = false;
+          username.value = "";
+          email.value = "";
         }
       } catch (error) {
-        console.error("Error al verificar el estado del usuario:", error);
+        console.error("Error al obtener el usuario:", error);
+        isLoggedIn.value = false;
       }
     };
 
-    const handleLogout = async () => {
-      await AuthServices.logoutUser();
-      isLoggedIn.value = false;
-      username.value = "";
-      email.value = "";
-    };
-
-    onMounted(() => {
-      checkUserStatus();
+    watchEffect(() => {
+      checkUserStatus(); 
     });
+
+    const handleLogout = async () => {
+      try {
+        await logoutUser(); 
+        toast.success("Sesión cerrada exitosamente");
+        router.push("/login");
+        isLoggedIn.value = false;
+        username.value = "";
+        email.value = "";
+        console.log("Sesión cerrada");
+      } catch (error) {
+        console.error("Error al cerrar sesión:", error);
+      }
+    };
 
     return {
       isLoggedIn,

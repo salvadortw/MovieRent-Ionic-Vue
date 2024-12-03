@@ -9,107 +9,52 @@
       </ion-toolbar>
     </ion-header>
     <ion-content>
-      <ion-list>
-        <ion-item-sliding>
-          <ion-item>
-            <div class="movie-image w-40">
+      <section v-if="cart.length > 0">
+        <ion-list>
+          <ion-item-sliding v-for="(movie, i) in cart" :key="movie.id">
+            <ion-item class="mb-4">
               <img
-                src="https://image.tmdb.org/t/p/original/pi6mwFCtTDIAHOHWan4AQ36Tdh2.jpg"
-                alt=""
+                :src="movie.poster_path ? 'https://image.tmdb.org/t/p/w500' + movie.poster_path : 'https://via.placeholder.com/150'"
+                alt="Movie Poster"
+                class="movie-poster"
               />
-            </div>
-            <div class="info-movie px-8">
-              <h2 class="text-xl font-bold mb-2">Película 1</h2>
-              <ion-label class="text-sm opacity-60 mb-2"
-                >Alquiler por 24 horas</ion-label
-              >
-              <ion-label class="text-base font-semibold">$1.900</ion-label>
-            </div>
-          </ion-item>
+              <div class="info-movie px-4">
+                <h2 class="text-xl font-bold mb-1">{{ movie.title || 'Título no disponible' }}</h2>
+                <ion-label class="text-base font-semibold">$1,900</ion-label>
+              </div>
+            </ion-item>
+            <ion-item-options side="end">
+              <ion-item-option color="danger" @click="removeFromCart(movie.id)">
+                <ion-icon slot="icon-only" :icon="trash"></ion-icon>
+              </ion-item-option>
+            </ion-item-options>
+          </ion-item-sliding>
+        </ion-list>
 
-          <ion-item-options side="end">
-            <ion-item-option>
-              <ion-icon slot="icon-only" :icon="heart"></ion-icon>
-            </ion-item-option>
-            <ion-item-option color="danger" class="font-xs">
-              <ion-icon slot="icon-only" :icon="trash"></ion-icon>
-            </ion-item-option>
-          </ion-item-options>
-        </ion-item-sliding>
-
-        <ion-item-sliding>
-          <ion-item>
-            <div class="movie-image w-40">
-              <img
-                src="https://image.tmdb.org/t/p/original/pi6mwFCtTDIAHOHWan4AQ36Tdh2.jpg"
-                alt=""
-              />
-            </div>
-            <div class="info-movie px-8">
-              <h2 class="text-xl font-bold mb-2">Película 2</h2>
-              <ion-label class="text-sm opacity-60 mb-2"
-                >Alquiler por 24 horas</ion-label
-              >
-              <ion-label class="text-base font-semibold">$1.900</ion-label>
-            </div>
-          </ion-item>
-
-          <ion-item-options side="end">
-            <ion-item-option>
-              <ion-icon slot="icon-only" :icon="heart"></ion-icon>
-            </ion-item-option>
-            <ion-item-option color="danger">
-              <ion-icon slot="icon-only" :icon="trash"></ion-icon>
-            </ion-item-option>
-          </ion-item-options>
-        </ion-item-sliding>
-
-        <ion-item-sliding>
-          <ion-item>
-            <div class="movie-image w-40">
-              <img
-                src="https://image.tmdb.org/t/p/original/pi6mwFCtTDIAHOHWan4AQ36Tdh2.jpg"
-                alt=""
-              />
-            </div>
-            <div class="info-movie px-8">
-              <h2 class="text-xl font-bold mb-2">Película 3</h2>
-              <ion-label class="text-sm opacity-60 mb-2"
-                >Alquiler por 24 horas</ion-label
-              >
-              <ion-label class="text-base font-semibold">$1.900</ion-label>
-            </div>
-          </ion-item>
-
-          <ion-item-options side="end">
-            <ion-item-option>
-              <ion-icon slot="icon-only" :icon="heart"></ion-icon>
-            </ion-item-option>
-            <ion-item-option color="danger">
-              <ion-icon slot="icon-only" :icon="trash"></ion-icon>
-            </ion-item-option>
-          </ion-item-options>
-        </ion-item-sliding>
-      </ion-list>
-
-      <ion-footer collapse="fade" class="sticky bottom-0">
+        <ion-footer collapse="fade" class="sticky bottom-0">
         <ion-toolbar>
-          <div class="flex justify-between items-center mb-4 px-2 mt-4">
+          <div class="flex justify-between items-center mb-4 px-4">
             <ion-label class="text-lg font-semibold">Total</ion-label>
-            <ion-label class="text-lg font-semibold">$5.700</ion-label>
+            <ion-label class="text-lg font-semibold">${{ cart.length * 1900 }}</ion-label>
           </div>
         </ion-toolbar>
         <ion-toolbar>
-          <ion-button class="w-full px-2 font-bold text-white" color="primary"
-            ><span class="text-white">Proceder al Pago</span></ion-button
-          >
+          <ion-button class="w-full font-bold text-white" color="primary">
+            <span class="text-white">Proceder al Pago</span>
+          </ion-button>
         </ion-toolbar>
       </ion-footer>
+      </section>
+      <section v-else>
+        <p class="text-center text-lg mt-8">Tu carrito está vacío.</p>
+      </section>
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
+import { onMounted, computed } from "vue";
+import { useCart } from "@/composables/useCart";
 import {
   IonHeader,
   IonToolbar,
@@ -129,7 +74,7 @@ import {
   IonButtons,
 } from "@ionic/vue";
 
-import { heart, trash } from "ionicons/icons";
+import { trash } from "ionicons/icons";
 
 export default {
   components: {
@@ -150,9 +95,23 @@ export default {
     IonMenuButton,
     IonButtons,
   },
+
+  setup() {
+    const { cart, removeFromCart, loadCart } = useCart();
+
+
+    onMounted(() => {
+      loadCart(); 
+    });
+
+    return {
+      cart,
+      removeFromCart,
+    };
+  },
+
   data() {
     return {
-      heart,
       trash,
     };
   },
@@ -160,8 +119,24 @@ export default {
 </script>
 
 <style scoped>
-.movie-image img {
-  border-radius: 6px;
-  margin-bottom: 15px;
+.movie-poster {
+  width: 100px;
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.info-movie {
+  flex: 1;
+  margin-left: 12px;
+}
+
+h2 {
+  font-size: 16px;
+  margin: 0;
+}
+
+p {
+  text-align: center;
 }
 </style>

@@ -23,17 +23,6 @@
             <div class="space-y-4 rounded-md shadow-sm">
               <div>
                 <ion-input
-                  v-model="username"
-                  type="text"
-                  fill="solid"
-                  label="Nombre de Usuario"
-                  label-placement="floating"
-                  placeholder="Ej: Alonso01"
-                  class="mt-1"
-                ></ion-input>
-              </div>
-              <div>
-                <ion-input
                   v-model="email"
                   type="email"
                   fill="solid"
@@ -65,17 +54,6 @@
                   class="mt-1"
                 ></ion-input>
               </div>
-              <div>
-                <ion-input
-                  v-model="passwordConfirm"
-                  label="Confirma Contraseña"
-                  label-placement="floating"
-                  fill="solid"
-                  placeholder="Confirma tu contraseña"
-                  type="password"
-                  class="mt-1"
-                ></ion-input>
-              </div>
             </div>
             <div class="text-center">
               <ion-button
@@ -97,15 +75,6 @@
             </p>
           </div>
         </div>
-
-        <ion-alert
-          v-if="showAlert"
-          :is-open="showAlert"
-          @didDismiss="() => (showAlert = false)"
-          header="Error"
-          message="{{ errorMessage }}"
-          :buttons="[{ text: 'Aceptar' }]"
-        />
       </main>
     </ion-content>
   </ion-page>
@@ -125,9 +94,10 @@ import {
   IonAlert,
 } from "@ionic/vue";
 import { ref } from "vue";
-import AuthServices from "@/services/AuthServices";
 import { useRouter } from "vue-router";
 import { arrowBackOutline } from "ionicons/icons";
+import { registerUser } from "@/services/AuthServices";
+import { useToast } from "vue-toastification";
 
 export default {
   components: {
@@ -143,45 +113,29 @@ export default {
     IonAlert,
   },
   setup() {
-    const username = ref("");
-    const email = ref("");
-    const name = ref("");
-    const password = ref("");
-    const passwordConfirm = ref("");
-    const showAlert = ref(false);
-    const errorMessage = ref("");
     const router = useRouter();
+    const toast = useToast();
+
+    const email = ref("");
+    const password = ref("");
+    const name = ref("");
 
     const handleRegister = async () => {
       try {
-        if (password.value !== passwordConfirm.value) {
-          showAlert.value = true;
-          errorMessage.value = "Las contraseñas no coinciden";
-          return;
-        }
-        await AuthServices.registerUser(
-          username.value,
-          email.value,
-          name.value,
-          password.value,
-          passwordConfirm.value
-        );
+        await registerUser(email.value, name.value, password.value);
+        toast.success("¡Usuario registrado exitosamente!");
         router.push("/login");
-      } catch (error: any) {
-        showAlert.value = true;
-        errorMessage.value = error.message || "Error desconocido";
+      } catch (error) {
+        console.error("Error al registrar el usuario:", error);
+        toast.error("Hubo un error al registrar el usuario. Intenta nuevamente.");
       }
     };
 
     return {
-      username,
       email,
-      name,
       password,
-      passwordConfirm,
+      name,
       handleRegister,
-      showAlert,
-      errorMessage,
     };
   },
   data() {

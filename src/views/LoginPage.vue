@@ -19,7 +19,6 @@
               Inicia sesión para alquilar películas
             </p>
           </div>
-          <form @submit.prevent="loginUser" class="mt-8 space-y-6">
             <div class="space-y-4 rounded-md shadow-sm">
               <div>
                 <ion-input
@@ -58,10 +57,10 @@
                 class="font-semibold rounded-md"
                 type="submit"
                 expand="full"
+                @click="handleLogin"
                 >Iniciar Sesión</ion-button
               >
             </div>
-          </form>
           <div class="text-center">
             <p class="mt-2 text-sm text-muted-foreground">
               ¿No tienes una cuenta?
@@ -73,14 +72,6 @@
             </p>
           </div>
         </div>
-        <ion-alert
-          v-if="showAlert"
-          :is-open="showAlert"
-          onDidDismiss="() => showAlert = false"
-          header="Error"
-          message="{{ errorMessage }}"
-          :buttons="[{ text: 'Aceptar' }]"
-        />
       </main>
     </ion-content>
   </ion-page>
@@ -102,8 +93,9 @@ import {
 
 import { arrowBackOutline } from "ionicons/icons";
 import { ref } from "vue";
-import AuthServices from "@/services/AuthServices";
+import { loginUser } from "@/services/AuthServices";
 import { useRouter } from "vue-router";
+import { useToast } from "vue-toastification";
 
 export default {
   components: {
@@ -121,26 +113,24 @@ export default {
   setup() {
     const email = ref("");
     const password = ref("");
-    const showAlert = ref(false);
-    const errorMessage = ref("");
     const router = useRouter();
+    const toast = useToast();
 
-    const loginUser = async () => {
+    const handleLogin = async () => {
       try {
-        await AuthServices.loginUser(email.value, password.value);
-        router.push("/home");
-      } catch (error: any) {
-        showAlert.value = true;
-        errorMessage.value = error.message || "Error desconocido";
+        const userData = await loginUser(email.value, password.value);
+        toast.success("¡Bienvenido de nuevo!");
+        router.push("/miCuenta");
+      } catch (error) {
+        console.error("Error al iniciar sesión:", error);
+        toast.error("Hubo un error al iniciar sesión.");
       }
     };
 
     return {
       email,
       password,
-      loginUser,
-      showAlert,
-      errorMessage,
+      handleLogin,
     };
   },
   data() {

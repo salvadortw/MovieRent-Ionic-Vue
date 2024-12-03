@@ -21,11 +21,13 @@
     "@ionic/vue-router": "^8.0.0",
     "axios": "^1.7.7",
     "dotenv": "^16.4.5",
+    "firebase": "^11.0.2",
     "ionicons": "^7.0.0",
     "pocketbase": "^0.21.5",
     "swiper": "^11.1.14",
     "vue": "^3.3.0",
-    "vue-router": "^4.2.0"
+    "vue-router": "^4.2.0",
+    "vue-toastification": "^2.0.0-rc.5"
   },
   "devDependencies": {
     "@capacitor/cli": "6.1.2",

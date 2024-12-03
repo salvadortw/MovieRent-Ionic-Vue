@@ -41,13 +41,6 @@
         <ion-searchbar
           placeholder="Buscar películas, géneros..."
         ></ion-searchbar>
-        <!-- <h3 class="font-semibold text-xl mx-2">Categorías</h3> -->
-        <!-- <div class="categories ml-1">
-          <ion-chip color="primary" class="font-semibold">Acción</ion-chip>
-          <ion-chip>Terror</ion-chip>
-          <ion-chip>Drama</ion-chip>
-          <ion-chip>Comedia</ion-chip>
-        </div> -->
       </div>
 
       <h3 class="font-semibold text-lg ml-4">Películas Populares</h3>
@@ -257,7 +250,9 @@ import {
   getMovies,
 } from "@/services/MovieServices";
 import { useRouter } from "vue-router";
-
+import { useToast } from "vue-toastification";
+import { useFavorites } from "@/composables/useFavorites";
+import { useCart } from "@/composables/useCart";
 export default {
   components: {
     IonHeader,
@@ -285,6 +280,11 @@ export default {
     const crimeMovies = ref<Movie[]>([]);
     const thrillerMovies = ref<Movie[]>([]);
     const router = useRouter();
+
+    const toast = useToast();
+
+    const { favorites, addFavorite, removeFavorite, loadFavorites } = useFavorites();
+    const { addToCart } = useCart();
 
     const getData = async () => {
       try {
@@ -337,6 +337,7 @@ export default {
       getDataFamilyMovies();
       getDataCrimeMovies();
       getDataThrillerMovies();
+      loadFavorites();
     });
 
     const isOpen = ref(false);
@@ -352,23 +353,29 @@ export default {
         text: "Agregar a Favoritos",
         role: "selected",
         icon: heartOutline,
-        data: {
-          action: "addToFav",
+        handler: () => {
+          if (selectedMovie.value) {
+            addFavorite(selectedMovie.value);
+          }
+          isOpen.value = false; 
         },
       },
       {
         text: "Agregar al Carro",
         role: "selected",
         icon: cartOutline,
-        data: {
-          action: "addToCart",
+        handler: () => {
+          if (selectedMovie.value) {
+            addToCart(selectedMovie.value);
+          }
+          isOpen.value = false;
         },
       },
       {
         text: "Cancelar",
         role: "cancel",
-        data: {
-          action: "cancel",
+        handler: () => {
+          isOpen.value = false;
         },
       },
     ]);
@@ -393,20 +400,29 @@ export default {
       familyMovies,
       crimeMovies,
       thrillerMovies,
+      addToCart,
+      favorites,
+      addFavorite,
+      removeFavorite,
     };
   },
 };
 </script>
 
 <style scoped>
+.swiperMovies .swiper-slide img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
 .img-swiper {
   width: 100%;
-  height: 200px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 0px;
 }
 
 img {
-  width: 100%;
-  height: 340px;
   border-radius: 6px;
 }
 
@@ -444,5 +460,82 @@ ion-searchbar {
 ion-button .custom {
   padding: 0px !important;
   margin: 0px !important;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .swiperMovies {
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .swiperMovies::-webkit-scrollbar {
+    display: none;
+  }
+
+  .swiperMovies .swiper-slide {
+    display: inline-block;
+    white-space: normal;
+  }
+}
+
+@media (max-width: 768px) {
+  .swiperMovies {
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .swiperMovies::-webkit-scrollbar {
+    display: none;
+  }
+
+  .swiperMovies .swiper-slide {
+    display: inline-block;
+    white-space: normal;
+  }
+}
+
+@media (max-width: 640px) {
+  .swiperMovies {
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .swiperMovies::-webkit-scrollbar {
+    display: none;
+  }
+
+  .swiperMovies .swiper-slide {
+    display: inline-block;
+    white-space: normal;
+  }
+}
+
+@media (max-width: 480px) {
+  .swiperMovies {
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .swiperMovies::-webkit-scrollbar {
+    display: none;
+  }
+
+  .swiperMovies .swiper-slide {
+    display: inline-block;
+    white-space: normal;
+  }
 }
 </style>

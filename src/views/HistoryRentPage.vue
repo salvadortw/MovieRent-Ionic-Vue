@@ -9,18 +9,20 @@
         <ion-title>Historial de Renta</ion-title>
       </ion-toolbar>
     </ion-header>
+
     <ion-content>
       <div
-        v-if="rentalHistory.length === 0"
+        v-if="purchases.length === 0"
         class="grid justify-center absolute left-0 right-0 top-[50%]"
       >
         No has realizado ninguna compra aún.
       </div>
+
       <ion-list v-else>
-        <ion-item v-for="rental in rentalHistory" :key="rental.movieId">
+        <ion-item v-for="rental in purchases" :key="rental.movieId">
           <ion-label class="px-2">
-            <h2 class="text-xl font-bold mb-2">{{ rental.movieTitle }}</h2>
-            <p class="font-semibold text-base mb-2">
+            <h1 class="text-xl font-bold mb-2">{{ rental.movieTitle }}</h1>
+            <p class="font-semibold text-lg mb-2">
               {{ rental.type === "rent" ? "Arriendo" : "Compra" }}
             </p>
             <p
@@ -38,6 +40,7 @@
 </template>
 
 <script lang="ts">
+import { ref, onMounted } from "vue";
 import {
   IonHeader,
   IonToolbar,
@@ -51,8 +54,8 @@ import {
   IonLabel,
   IonList,
 } from "@ionic/vue";
-
-import { ref, onMounted } from "vue";
+import { usePurchase } from "@/composables/usePurchase";
+import { Purchase } from "@/interfaces/Purchase";
 
 export default {
   components: {
@@ -69,22 +72,17 @@ export default {
     IonList,
   },
   setup() {
-    const rentalHistory = ref<any[]>([]);
+    const { getPurchases } = usePurchase();
+    const purchases = ref<Purchase[]>([]);
 
     onMounted(() => {
-      const history = JSON.parse(localStorage.getItem("rentalHistory") || "[]");
-      console.log("Historial recuperado desde localStorage:", history);
-
-      rentalHistory.value = history;
+      purchases.value = getPurchases(); 
+      console.log(purchases.value);
     });
 
     return {
-      rentalHistory,
+      purchases,
     };
-  },
-
-  data() {
-    return {};
   },
 };
 </script>

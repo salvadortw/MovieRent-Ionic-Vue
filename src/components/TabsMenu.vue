@@ -64,3 +64,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+ion-tab-bar {
+  --background: #181818;
+}
+</style>

@@ -18,3 +18,10 @@ export default defineComponent({
     components: { IonApp, IonRouterOutlet, TabsMenu, Menu, },
   });
 </script>
+
+<style scoped>
+  #app {
+    --background: var(--ion-color-dark);
+    --color: var(--ion-color-light);
+  }
+</style>

@@ -11,7 +11,7 @@ export interface DetailMovie extends Movie {
   release_date: string;
   vote_average: number;
   runtime: number;
-  genre: Genre[];
+  genres: Genres[];
 }
 
 export interface Cast {
@@ -21,7 +21,7 @@ export interface Cast {
   character: string;
 }
 
-export interface Genre {
+export interface Genres {
   id: number;
   name: string;
 }

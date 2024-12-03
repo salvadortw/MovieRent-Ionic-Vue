@@ -3,7 +3,7 @@
     <ion-header>
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-back-button default-href="#"></ion-back-button>
+          <ion-back-button router-link="#"></ion-back-button>
         </ion-buttons>
         <ion-title>{{ movie?.title }}</ion-title>
       </ion-toolbar>
@@ -43,11 +43,11 @@
             <span>{{ movie.release_date }}</span>
           </div>
 
-          <div class="flex flex-wrap gap-1 mb-4 ml-[-5px]">
+          <div class="flex flex-wrap gap-1 mb-4 ml-[-5px] font-semibold">
             <ion-chip
-              v-for="genre in movie.genre"
+              v-for="genre in movie.genres"
               :key="genre.id"
-              color="primary"
+              color="secondary"
             >
               {{ genre.name }}
             </ion-chip>
@@ -156,42 +156,32 @@ import {
   IonTitle,
   IonContent,
   IonPage,
-  IonSearchbar,
   IonChip,
   IonButton,
   IonIcon,
-  IonImg,
   IonBackButton,
   IonButtons,
-  IonThumbnail,
   IonModal,
 } from "@ionic/vue";
 
-// import Swiper core and required modules
 import { Navigation, Pagination, FreeMode } from "swiper/modules";
-
-// Import Swiper Vue.js components
 import { Swiper, SwiperSlide } from "swiper/vue";
 
-// Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import "swiper/css/scrollbar";
-import "swiper/css/effect-coverflow";
 
 import {
   calendarOutline,
   chevronForwardOutline,
-  starOutline,
   timeOutline,
 } from "ionicons/icons";
 import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import { getDetailMovie, getCast } from "@/services/MovieServices";
-import { addMovieToPurchase } from "@/services/PurchaseServices";
-import type { DetailMovie, Cast, Movie } from "@/interfaces/Movie";
+import { usePurchase } from "../composables/usePurchase";
 import router from "@/router";
+import type { DetailMovie, Cast } from "@/interfaces/Movie";
 
 export default {
   components: {
@@ -200,7 +190,6 @@ export default {
     IonTitle,
     IonContent,
     IonPage,
-    IonSearchbar,
     IonChip,
     IonIcon,
     IonButton,
@@ -211,59 +200,26 @@ export default {
     IonModal,
   },
   setup() {
-    const { addPurchase } = addMovieToPurchase();
     const route = useRoute();
     const movie = ref<DetailMovie | null>(null);
     const cast = ref<Cast[]>([]);
-    const selectedMovie = ref<Movie | null>(null);
-    const isPurchaseModalOpen = ref(false);
-    const rentalHours = ref<number | string | null>(null);
-    const price = ref<number | null>(null);
 
-    const openPurchaseModal = (
-      movie: Movie,
-      type: "buy" | "rent",
-      hours: number | "always",
-      priceValue: number
-    ) => {
-      selectedMovie.value = movie;
-      rentalHours.value = hours || null;
-      price.value = priceValue || null;
-      isPurchaseModalOpen.value = true;
-    };
-
-    const confirmPurchase = () => {
-      if (
-        !selectedMovie.value ||
-        rentalHours.value === null ||
-        price.value === null
-      ) {
-        return;
-      }
-
-      addPurchase({
-        movieId: selectedMovie.value.id,
-        movieTitle: selectedMovie.value.title,
-        type: rentalHours.value === "always" ? "buy" : "rent",
-        hours: rentalHours.value,
-        price: price.value,
-      });
-
-      const message =
-        rentalHours.value === "always"
-          ? `Has comprado la película ${selectedMovie.value.title} por ${price.value} pesos.`
-          : `Has arrendado la película ${selectedMovie.value.title} por ${rentalHours.value} horas por ${price.value} pesos.`;
-
-      alert(message);
-      isPurchaseModalOpen.value = false;
-    };
+    const {
+      isPurchaseModalOpen,
+      openPurchaseModal,
+      confirmPurchase,
+      closeModal,
+      selectedMovie,
+      rentalHours,
+      price,
+    } = usePurchase();
 
     const loadMovieDetails = async () => {
       const movieId = route.params.id;
       try {
         const movieDetails = await getDetailMovie(Number(movieId));
         const movieCast = await getCast(Number(movieId));
-        movie.value = movieDetails as DetailMovie;
+        movie.value = movieDetails;
         cast.value = movieCast;
       } catch (error) {
         console.error("Error al cargar detalles de la película:", error);
@@ -283,25 +239,21 @@ export default {
       movie,
       cast,
       goToMovieDetail,
+      isPurchaseModalOpen,
       openPurchaseModal,
       confirmPurchase,
+      closeModal,
       selectedMovie,
-      isPurchaseModalOpen,
       rentalHours,
       price,
-    };
-  },
-
-  data() {
-    return {
       calendarOutline,
-      starOutline,
       timeOutline,
       chevronForwardOutline,
     };
   },
 };
 </script>
+
 
 <style scoped>
 .imageCover {

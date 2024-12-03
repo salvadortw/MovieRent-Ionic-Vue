@@ -1,41 +1,33 @@
-import { Purchase } from "@/interfaces/Purchase";
 import { ref } from "vue";
+import { Purchase } from "@/interfaces/Purchase";
 
 const purchases = ref<Purchase[]>([]);
 
-export const addMovieToPurchase = () => {
-  const addPurchase = (purchaseData: {
-    movieId: number;
-    movieTitle: string;
-    type: "buy" | "rent";
-    hours: number | string;
-    price: number;
-  }) => {
-    let history = JSON.parse(localStorage.getItem("rentalHistory") || "[]");
-
-    const newEntry = {
-      movieId: purchaseData.movieId,
-      movieTitle: purchaseData.movieTitle,
-      type: purchaseData.type,
-      hours: purchaseData.hours,
-      price: purchaseData.price,
-    };
-
-    history.push(newEntry);
-
-    localStorage.setItem("rentalHistory", JSON.stringify(history));
-
-    purchases.value = history;
-
-    console.log("Actualizar localStorage:", newEntry);
+export function usePurchase() {
+  // Metodo para agregar una compra o alquiler
+  const addPurchase = (purchase: Purchase) => {
+    purchases.value.push(purchase);
+    savePurchasesToLocalStorage();
   };
 
+  // Metodo para obtener las compras almacenadas
   const getPurchases = () => {
+    loadPurchasesFromLocalStorage();
     return purchases.value;
   };
 
-  return {
-    addPurchase,
-    getPurchases,
+  // Guardar las compras en localStorage
+  const savePurchasesToLocalStorage = () => {
+    localStorage.setItem("purchases", JSON.stringify(purchases.value));
   };
-};
+
+  // Cargar las compras desde localStorage
+  const loadPurchasesFromLocalStorage = () => {
+    const savedPurchases = localStorage.getItem("purchases");
+    if (savedPurchases) {
+      purchases.value = JSON.parse(savedPurchases);
+    }
+  };
+
+  return { addPurchase, getPurchases };
+}

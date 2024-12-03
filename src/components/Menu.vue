@@ -19,17 +19,6 @@
           </button>
         </ion-item>
       </ion-list>
-
-      <ion-button
-        expand="full"
-        fill="clear"
-        @click="handleAuthAction"
-        class="mt-4"
-        :class="authButtonClass"
-      >
-        <ion-icon :icon="authIcon"></ion-icon>
-        <span class="ml-2">{{ authButtonText }}</span>
-      </ion-button>
     </ion-content>
   </ion-menu>
 </template>
@@ -60,7 +49,6 @@ import {
   callOutline,
   informationCircleOutline,
 } from "ionicons/icons";
-import AuthServices from "@/services/AuthServices";
 import { useRouter } from "vue-router";
 
 export default defineComponent({
@@ -81,7 +69,6 @@ export default defineComponent({
   },
 
   setup() {
-    const user = ref(AuthServices.getCurrentUser());
     const router = useRouter();
 
     const views = [
@@ -104,34 +91,12 @@ export default defineComponent({
       },
     ];
 
-    const authButtonText = computed(() =>
-      user.value ? "Cerrar Sesión" : "Iniciar Sesión"
-    );
-    const authIcon = computed(() => (user.value ? logInOutline : logInOutline));
-    const authButtonClass = computed(() =>
-      user.value ? "text-red-500" : "text-blue-500"
-    );
-
-    const handleAuthAction = async () => {
-      if (user.value) {
-        await AuthServices.logoutUser();
-        user.value = null;
-      } else {
-        menuController.close("app-menu");
-        router.push("/login");
-      }
-    };
-
     return {
       views,
       menuNavegation: (url: string) => {
         menuController.close("app-menu");
         router.push(url);
       },
-      handleAuthAction,
-      authButtonText,
-      authIcon,
-      authButtonClass,
     };
   },
 });
@@ -140,5 +105,8 @@ export default defineComponent({
 <style scoped>
 ion-item::part(native) {
   border-radius: 16px;
+}
+ion-item {
+  --background: hsla(0, 4%, 60%, 0.1);
 }
 </style>

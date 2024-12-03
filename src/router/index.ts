@@ -1,23 +1,20 @@
 import { createRouter, createWebHistory } from "@ionic/vue-router";
 import { RouteRecordRaw } from "vue-router";
-import TabsMenu from "@/components/TabsMenu.vue";
+import TabsMenu from "@/components/TabsMenu.vue"; 
+import NoTabsLayout from "@/components/NoTabsLayout.vue"; 
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
-    redirect: "/home",
+    redirect: "/bienvenida", 
   },
   {
     path: "/",
-    component: TabsMenu,
+    component: TabsMenu, 
     children: [
       {
-        path: "",
-        redirect: "/home",
-      },
-      {
         path: "home",
-        component: () => import("../views/HomePage.vue"),
+        component: () => import("@/views/HomePage.vue"),
       },
       {
         path: "explorar",
@@ -32,28 +29,16 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/MyAccount.vue"),
       },
       {
-        path: "login",
-        component: () => import("@/views/LoginPage.vue"),
-      },
-      {
-        path: "movie/:id",
-        component: () => import("@/views/MovieDetailPage.vue"),
-      },
-      {
-        path: "registro",
-        component: () => import("@/views/SignUpPage.vue"),
-      },
-      {
         path: "historial",
         component: () => import("@/views/HistoryRentPage.vue"),
       },
       {
-        path: "configuracion",
-        component: () => import("@/views/SettingsPage.vue"),
-      },
-      {
         path: "favoritos",
         component: () => import("@/views/FavoritesPage.vue"),
+      },
+      {
+        path: "configuracion",
+        component: () => import("@/views/SettingsPage.vue"),
       },
       {
         path: "sobreNosotros",
@@ -66,6 +51,28 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: "reparto/:id",
         component: () => import("@/views/CastPage.vue"),
+      },
+      {
+        path: "movie/:id",
+        component: () => import("@/views/MovieDetailPage.vue"),
+      },
+    ],
+  },
+  {
+    path: "/",
+    component: NoTabsLayout, 
+    children: [
+      {
+        path: "bienvenida",
+        component: () => import("@/views/WelcomePage.vue"),
+      },
+      {
+        path: "login",
+        component: () => import("@/views/LoginPage.vue"),
+      },
+      {
+        path: "registro",
+        component: () => import("@/views/SignUpPage.vue"),
       },
     ],
   },
