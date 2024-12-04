@@ -24,7 +24,6 @@
 
         <div class="space-y-4 mt-5">
           <ion-button
-            router-link="/"
             class="custom-button"
             expand="block"
             fill="default"
@@ -35,7 +34,6 @@
           </ion-button>
 
           <ion-button
-            router-link="/"
             class="custom-button"
             expand="block"
             fill="default"
